@@ -63,7 +63,7 @@ describe 'Merchant' do
   it 'deletes a merchant' do
     merchant = create(:merchant)
 
-    expect(Mercant.count).to eq(1)
+    expect(Merchant.count).to eq(1)
 
     delete "/api/v1/merchants/#{merchant.id}"
 
