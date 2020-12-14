@@ -39,7 +39,7 @@ describe 'Merchant' do
 
     headers = { 'CONTENT-TYPE' => 'application/json' }
 
-    post '/api/v1/merchants', headers: headers, params: JSON.generate(merchant: merchant_params)
+    post '/api/v1/merchants', headers: headers, params: JSON.generate(merchant_params)
     created_merchant = Merchant.last
 
     expect(response).to be_successful
@@ -52,7 +52,7 @@ describe 'Merchant' do
     merchant_params = { name: 'Burger King' }
     headers = { 'CONTENT-TYPE' => 'application/json'}
 
-    patch "/api/v1/merchants/#{id}", headers: headers, params: JSON.generate(merchant: merchant_params)
+    patch "/api/v1/merchants/#{id}", headers: headers, params: JSON.generate(merchant_params)
     merchant = Merchant.find(id)
 
     expect(response).to be_successful
@@ -70,5 +70,6 @@ describe 'Merchant' do
     expect(response).to be_successful
     expect(Merchant.count).to eq(0)
     expect{Merchant.find(merchant.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    expect(response.status).to eq(204)
   end
 end
