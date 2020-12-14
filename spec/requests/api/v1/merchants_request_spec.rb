@@ -59,4 +59,16 @@ describe 'Merchant' do
     expect(merchant.name).to_not eq(previous_name)
     expect(merchant.name).to eq('Burger King')
   end
+
+  it 'deletes a merchant' do
+    merchant = create(:merchant)
+
+    expect(Mercant.count).to eq(1)
+
+    delete "/api/v1/merchants/#{merchant.id}"
+
+    expect(response).to be_successful
+    expect(Merchant.count).to eq(0)
+    expect{Merchant.find(merchant.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
 end
