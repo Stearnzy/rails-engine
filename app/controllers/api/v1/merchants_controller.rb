@@ -11,6 +11,10 @@ class Api::V1::MerchantsController < ApplicationController
     render json: Merchant.create(merchant_params)
   end
 
+  def update
+    merchant = Merchant.update(params[:id], merchant_params)
+  end
+
   private
 
   def merchant_params
