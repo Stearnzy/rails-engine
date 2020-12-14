@@ -39,7 +39,7 @@ describe 'Merchant' do
 
     headers = { 'Content-Type' => 'application/json' }
 
-    post '/api/v1/merchants', headers: headers, params: JSON.generate(book: merchant_params)
+    post '/api/v1/merchants', headers: headers, params: JSON.generate(merchant: merchant_params)
     created_merchant = Merchant.last
 
     expect(response).to be_successful
