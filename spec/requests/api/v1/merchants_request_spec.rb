@@ -73,8 +73,19 @@ describe 'Merchant' do
     expect(response.status).to eq(204)
   end
 
-  # it 'deleting a merchant also destroys its items' do
-  #   merchant = create(:merchant, :with_items)
-  #   require 'pry'; binding.pry
-  # end
+  it 'deleting a merchant also destroys its items' do
+    merchant_1 = create(:merchant, :with_items)
+    merchant_2 = create(:merchant, :with_items)
+    
+    expect(Merchant.count).to eq(2)
+    expect(Item.count).to eq(8)
+
+    delete "/api/v1/merchants/#{merchant_2.id}"
+
+    expect(response).to be_successful
+    expect(Merchant.count).to eq(1)
+    expect(Item.count).to eq(4)
+    expect{Merchant.find(merchant_2.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    expect(response.status).to eq(204)
+  end
 end
