@@ -61,4 +61,22 @@ describe 'Item' do
     expect(created_item.unit_price).to eq(item_params[:unit_price])
     expect(created_item.merchant_id).to eq(item_params[:merchant_id])
   end
+
+  it 'updates an existing item' do
+    original_item = create(:item)
+    item_params = { unit_price: 75.50 }
+    headers = { 'CONTENT-TYPE' => 'application/json'}
+
+    patch "/api/v1/items/#{original_item.id}", headers: headers, params: JSON.generate(item_params)
+    updated_item = Item.find(original_item.id)
+
+    expect(response).to be_successful
+
+    expect(original_item.name).to eq(updated_item.name)
+    expect(original_item.description).to eq(updated_item.description)
+    expect(original_item.merchant_id).to eq(updated_item.merchant_id)
+
+    expect(original_item.unit_price).to_not eq(updated_item.unit_price)
+    expect(updated_item.unit_price).to eq(75.50)
+  end
 end
