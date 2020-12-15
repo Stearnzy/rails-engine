@@ -28,7 +28,7 @@ describe 'Merchant' do
     expect(response).to be_successful
 
     expect(merchant[:data]).to have_key(:id)
-    expect(merchant[:data][:id]).to eq("#{id}")
+    expect(merchant[:data][:id]).to eq(id.to_s)
 
     expect(merchant[:data][:attributes]).to have_key(:name)
     expect(merchant[:data][:attributes][:name]).to be_a(String)
@@ -39,7 +39,7 @@ describe 'Merchant' do
 
     headers = { 'CONTENT-TYPE' => 'application/json' }
 
-    post '/api/v1/merchants', headers: headers, params: JSON.generate(merchant: merchant_params)
+    post '/api/v1/merchants', headers: headers, params: JSON.generate(merchant_params)
     created_merchant = Merchant.last
 
     expect(response).to be_successful
@@ -50,9 +50,9 @@ describe 'Merchant' do
     id = create(:merchant).id
     previous_name = Merchant.last.name
     merchant_params = { name: 'Burger King' }
-    headers = { 'CONTENT-TYPE' => 'application/json'}
+    headers = { 'CONTENT-TYPE' => 'application/json' }
 
-    patch "/api/v1/merchants/#{id}", headers: headers, params: JSON.generate(merchant: merchant_params)
+    patch "/api/v1/merchants/#{id}", headers: headers, params: JSON.generate(merchant_params)
     merchant = Merchant.find(id)
 
     expect(response).to be_successful
@@ -69,6 +69,23 @@ describe 'Merchant' do
 
     expect(response).to be_successful
     expect(Merchant.count).to eq(0)
-    expect{Merchant.find(merchant.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    expect { Merchant.find(merchant.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    expect(response.status).to eq(204)
+  end
+
+  it 'deleting a merchant also destroys its items' do
+    merchant_1 = create(:merchant, :with_items)
+    merchant_2 = create(:merchant, :with_items)
+
+    expect(Merchant.count).to eq(2)
+    expect(Item.count).to eq(8)
+
+    delete "/api/v1/merchants/#{merchant_2.id}"
+
+    expect(response).to be_successful
+    expect(Merchant.count).to eq(1)
+    expect(Item.count).to eq(4)
+    expect { Merchant.find(merchant_2.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    expect(response.status).to eq(204)
   end
 end
