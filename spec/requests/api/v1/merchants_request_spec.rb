@@ -72,4 +72,9 @@ describe 'Merchant' do
     expect{Merchant.find(merchant.id)}.to raise_error(ActiveRecord::RecordNotFound)
     expect(response.status).to eq(204)
   end
+
+  # it 'deleting a merchant also destroys its items' do
+  #   merchant = create(:merchant, :with_items)
+  #   require 'pry'; binding.pry
+  # end
 end
