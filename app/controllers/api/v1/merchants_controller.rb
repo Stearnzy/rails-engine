@@ -16,7 +16,7 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def destroy
-    Merchant.delete(params[:id])
+    Merchant.destroy(params[:id])
   end
 
   private
