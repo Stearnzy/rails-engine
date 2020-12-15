@@ -79,4 +79,17 @@ describe 'Item' do
     expect(original_item.unit_price).to_not eq(updated_item.unit_price)
     expect(updated_item.unit_price).to eq(75.50)
   end
+
+  it 'deletes an existing item' do
+    item = create(:item)
+
+    expect(Item.count).to eq(1)
+
+    delete "/api/v1/items/#{item.id}"
+
+    expect(response).to be_successful
+    expect(Item.count).to eq(0)
+    expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    expect(response.status).to eq(204)
+  end
 end
