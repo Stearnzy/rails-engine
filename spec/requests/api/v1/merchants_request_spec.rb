@@ -78,13 +78,13 @@ describe 'Merchant' do
     merchant_2 = create(:merchant, :with_items)
 
     expect(Merchant.count).to eq(2)
-    expect(Item.count).to eq(8)
+    expect(Item.count).to eq(6)
 
     delete "/api/v1/merchants/#{merchant_2.id}"
 
     expect(response).to be_successful
     expect(Merchant.count).to eq(1)
-    expect(Item.count).to eq(4)
+    expect(Item.count).to eq(3)
     expect { Merchant.find(merchant_2.id) }.to raise_error(ActiveRecord::RecordNotFound)
     expect(response.status).to eq(204)
   end

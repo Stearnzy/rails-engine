@@ -3,8 +3,12 @@ FactoryBot.define do
     name { Faker::Company.name }
   
     trait :with_items do
-      after :create do |merchant|
-        create_list(:item, 4, merchant: merchant)
+      transient do
+        items { 3 }
+      end
+
+      after :create do |merchant, evaluator|
+        create_list(:item, evaluator.items, merchant: merchant)
       end
     end
   end
