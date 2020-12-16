@@ -49,14 +49,14 @@ describe 'Item search' do
       expect(result[:data][:attributes][:merchant_id]).to eq(@item_1.merchant_id)
     end
 
-    xit 'I get only one result' do
+    it 'I get only one result' do
       get '/api/v1/items/find?name=a'
 
       expect(response).to be_successful
 
       result = JSON.parse(response.body, symbolize_names: true)
 
-      require 'pry'; binding.pry
+      expect(result).to be_a Hash
     end
 
     it 'search can be case insensitive' do
@@ -188,6 +188,8 @@ describe 'Item search' do
       expect(response).to be_successful
 
       result = JSON.parse(response.body, symbolize_names: true)
+
+      expect(result[:data]).to be_an Array
 
       expect(result[:data].count).to eq(4)
       expect(result[:data][0][:attributes][:name]).to eq(@item_1.name)
