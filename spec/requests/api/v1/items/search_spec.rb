@@ -3,10 +3,10 @@ require 'rails_helper'
 describe 'Item search' do
   before(:each) do
     @merchant_1 = Merchant.create!(name: 'Cheesemeister')
-    @item_1 = Item.create!(name: 'Stinky Blue Cheese', description: 'Smells like feet', unit_price: 12.25, merchant_id: @merchant_1.id)
-    @item_2 = Item.create!(name: 'Simply Swiss Cheese', description: 'Holy moly', unit_price: 10.00, merchant_id: @merchant_1.id)
-    @item_3 = Item.create!(name: 'Cowboy Cheddar Cheese', description: 'Sharp as a tack', unit_price: 8.75, merchant_id: @merchant_1.id)
-    @item_4 = Item.create!(name: 'Goat Gouda Cheese', description: 'Baaaaah', unit_price: 15.50, merchant_id: @merchant_1.id)
+    @item_1 = Item.create!(name: 'Stinky Blue Cheese', description: 'Smells like feet', unit_price: 12.25, merchant_id: @merchant_1.id, created_at: '2015-04-13', updated_at: '2020-11-15')
+    @item_2 = Item.create!(name: 'Simply Swiss Cheese', description: 'Holy moly', unit_price: 10.00, merchant_id: @merchant_1.id, created_at: '2014-12-25', updated_at: '2020-09-11')
+    @item_3 = Item.create!(name: 'Cowboy Cheddar Cheese', description: 'Sharp as a tack', unit_price: 8.75, merchant_id: @merchant_1.id, created_at: '2012-02-15', updated_at: '2020-10-31')
+    @item_4 = Item.create!(name: 'Goat Gouda Cheese', description: 'Baaaaah', unit_price: 15.50, merchant_id: @merchant_1.id, created_at: '2014-03-13', updated_at: '2020-12-01')
   end
 
   it 'when I search for an item name, I get results' do
