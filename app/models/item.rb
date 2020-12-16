@@ -10,9 +10,8 @@ class Item < ApplicationRecord
       Item.find_by("LOWER(#{search_key}) LIKE ?", "%#{search_value.downcase}%")
     elsif search_key == 'unit_price'
       Item.find_by("#{search_key} = #{search_value.to_f}")
-    # elsif search_key == 'created_at' || search_key == 'updated_at'
-    #   require 'pry'; binding.pry
-    #   Item.find_by("#{search_key} = '%#{search_value.to_date}%'")
+    elsif search_key == 'created_at' || search_key == 'updated_at'
+      Item.find_by("#{search_key} = '%#{search_value.to_date}%'")
     end
   end
 
@@ -21,9 +20,8 @@ class Item < ApplicationRecord
       Item.where("LOWER(#{search_key}) LIKE ?", "%#{search_value.downcase}%")
     elsif search_key == 'unit_price'
       Item.where("#{search_key} = #{search_value.to_f}")
-    # elsif search_key == 'created_at' || search_key == 'updated_at'
-    #   require 'pry'; binding.pry
-    #   Item.where("#{search_key} = '%#{search_value.to_date}%'")
+    elsif search_key == 'created_at' || search_key == 'updated_at'
+      Item.where("#{search_key} = '%#{search_value.to_date}%'")
     end   
   end
 end
