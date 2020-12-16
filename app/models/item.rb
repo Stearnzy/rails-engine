@@ -11,7 +11,7 @@ class Item < ApplicationRecord
     elsif search_key == 'unit_price'
       Item.find_by("#{search_key} = #{search_value.to_f}")
     elsif search_key == 'created_at' || search_key == 'updated_at'
-      Item.find_by("#{search_key} = '%#{search_value.to_date}%'")
+      Item.find_by("DATE(#{search_key}) = ?", "%#{search_value.to_date}%")
     end
   end
 
@@ -21,7 +21,7 @@ class Item < ApplicationRecord
     elsif search_key == 'unit_price'
       Item.where("#{search_key} = #{search_value.to_f}")
     elsif search_key == 'created_at' || search_key == 'updated_at'
-      Item.where("#{search_key} = '%#{search_value.to_date}%'")
+      Item.where("DATE(#{search_key}) = ?", "%#{search_value.to_date}%")
     end   
   end
 end

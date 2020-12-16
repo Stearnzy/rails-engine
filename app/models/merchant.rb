@@ -10,7 +10,7 @@ class Merchant < ApplicationRecord
     if search_key == 'name'
       Merchant.find_by("LOWER(#{search_key}) LIKE ?", "%#{search_value.downcase}%")
     elsif search_key == 'created_at' || search_key == 'updated_at'
-      Merchant.find_by("#{search_key} = '%#{search_value.to_date}%'")
+      Merchant.find_by("DATE(#{search_key}) = ?", "#{search_value.to_date}")
     end
   end
 
@@ -18,7 +18,7 @@ class Merchant < ApplicationRecord
     if search_key == 'name'
       Merchant.where("LOWER(#{search_key}) LIKE ?", "%#{search_value.downcase}%")
     elsif search_key == 'created_at' || search_key == 'updated_at'
-      Merchant.where("#{search_key} = '%#{search_value.to_date}%'")
+      Merchant.where("DATE(#{search_key}) = ?", "#{search_value.to_date}")
     end
   end
 end
