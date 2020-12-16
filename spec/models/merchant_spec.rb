@@ -35,6 +35,14 @@ RSpec.describe Merchant, type: :model do
         result = [Merchant.find_one('name', 'The')]
         expect(result.count).to eq(1)
       end
+
+      xit 'finds based on created_at' do
+
+      end
+
+      xit 'finds based on updated_at' do
+
+      end
     end
   end
 end
