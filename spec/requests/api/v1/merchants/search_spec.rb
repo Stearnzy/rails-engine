@@ -6,74 +6,75 @@ describe 'Merchant search' do
     @merchant_2 = Merchant.create!(name: 'Goldfish Central', created_at: '2020-11-11', updated_at: '2020-12-01')
   end
 
-  it 'when I search for a merchant, I get results' do
-    get "/api/v1/merchants/find?name=The+Bowling+Lane"
+  describe 'find_one' do
+    it 'when I search for a merchant, I get results' do
+      get '/api/v1/merchants/find?name=The+Bowling+Lane'
 
-    expect(response).to be_successful
+      expect(response).to be_successful
 
-    result = JSON.parse(response.body, symbolize_names: true)
+      result = JSON.parse(response.body, symbolize_names: true)
 
-    expect(result).to be_a Hash
-    expect(result).to have_key(:data)
-    expect(result[:data]).to be_a Hash
-    
-    expect(result[:data]).to have_key(:attributes)
-    expect(result[:data]).to be_a Hash
-    
-    expect(result[:data][:attributes]).to have_key(:name)
-    expect(result[:data][:attributes][:name]).to be_a String
-    expect(result[:data][:attributes][:name]).to eq(@merchant_1.name)
-  end
+      expect(result).to be_a Hash
+      expect(result).to have_key(:data)
+      expect(result[:data]).to be_a Hash
 
-  xit 'I get only one result' do
-    get "/api/v1/merchants/find?name=a"
+      expect(result[:data]).to have_key(:attributes)
+      expect(result[:data]).to be_a Hash
 
-    expect(response).to be_successful
+      expect(result[:data][:attributes]).to have_key(:name)
+      expect(result[:data][:attributes][:name]).to be_a String
+      expect(result[:data][:attributes][:name]).to eq(@merchant_1.name)
+    end
 
-    result = JSON.parse(response.body, symbolize_names: true)
+    xit 'I get only one result' do
+      get '/api/v1/merchants/find?name=a'
 
-    require 'pry'; binding.pry
-  end
+      expect(response).to be_successful
 
-  it 'search can be case insensitive' do
-    get "/api/v1/merchants/find?name=GoLdFIsH"
+      result = JSON.parse(response.body, symbolize_names: true)
 
-    expect(response).to be_successful
+      require 'pry'; binding.pry
+    end
 
-    result = JSON.parse(response.body, symbolize_names: true)
+    it 'search can be case insensitive' do
+      get '/api/v1/merchants/find?name=GoLdFIsH'
 
-    expect(result).to be_a Hash
-    expect(result).to have_key(:data)
-    expect(result[:data]).to be_a Hash
-    
-    expect(result[:data]).to have_key(:attributes)
-    expect(result[:data]).to be_a Hash
-    
-    expect(result[:data][:attributes]).to have_key(:name)
-    expect(result[:data][:attributes][:name]).to be_a String
-    expect(result[:data][:attributes][:name]).to eq(@merchant_2.name)
-  end
+      expect(response).to be_successful
 
-  it 'search can be partial' do
-    get "/api/v1/merchants/find?name=ldfi"
+      result = JSON.parse(response.body, symbolize_names: true)
 
-    expect(response).to be_successful
+      expect(result).to be_a Hash
+      expect(result).to have_key(:data)
+      expect(result[:data]).to be_a Hash
 
-    result = JSON.parse(response.body, symbolize_names: true)
+      expect(result[:data]).to have_key(:attributes)
+      expect(result[:data]).to be_a Hash
 
-    expect(result).to be_a Hash
-    expect(result).to have_key(:data)
-    expect(result[:data]).to be_a Hash
-    
-    expect(result[:data]).to have_key(:attributes)
-    expect(result[:data]).to be_a Hash
-    
-    expect(result[:data][:attributes]).to have_key(:name)
-    expect(result[:data][:attributes][:name]).to be_a String
-    expect(result[:data][:attributes][:name]).to eq(@merchant_2.name)
-  end
+      expect(result[:data][:attributes]).to have_key(:name)
+      expect(result[:data][:attributes][:name]).to be_a String
+      expect(result[:data][:attributes][:name]).to eq(@merchant_2.name)
+    end
 
-  xit 'searches by date' do
+    it 'search can be partial' do
+      get '/api/v1/merchants/find?name=ldfi'
 
+      expect(response).to be_successful
+
+      result = JSON.parse(response.body, symbolize_names: true)
+
+      expect(result).to be_a Hash
+      expect(result).to have_key(:data)
+      expect(result[:data]).to be_a Hash
+
+      expect(result[:data]).to have_key(:attributes)
+      expect(result[:data]).to be_a Hash
+
+      expect(result[:data][:attributes]).to have_key(:name)
+      expect(result[:data][:attributes][:name]).to be_a String
+      expect(result[:data][:attributes][:name]).to eq(@merchant_2.name)
+    end
+
+    xit 'searches by date' do
+    end
   end
 end
