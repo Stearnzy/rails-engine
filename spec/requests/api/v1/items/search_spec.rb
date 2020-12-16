@@ -3,10 +3,10 @@ require 'rails_helper'
 describe 'Item search' do
   before(:each) do
     @merchant_1 = Merchant.create!(name: 'Cheesemeister')
-    @item_1 = Item.create!(name: 'Stinky Blue Cheese', description: 'Smells like feet', unit_price: 15.50, merchant_id: @merchant_1.id, created_at: '2015-04-13', updated_at: '2020-11-15')
+    @item_1 = Item.create!(name: 'Stinky Blue Cheese', description: 'Smells like feet', unit_price: 15.50, merchant_id: @merchant_1.id, created_at: '2015-04-13', updated_at: '2020-10-30')
     @item_2 = Item.create!(name: 'Simply Swiss Cheese', description: 'Holy moly', unit_price: 10.00, merchant_id: @merchant_1.id, created_at: '2014-12-25', updated_at: '2020-09-11')
-    @item_3 = Item.create!(name: 'Cowboy Cheddar Cheese', description: 'Sharp as a tack', unit_price: 8.75, merchant_id: @merchant_1.id, created_at: '2012-02-15', updated_at: '2020-10-31')
-    @item_4 = Item.create!(name: 'Goat Gouda Cheese', description: 'Baaaaah', unit_price: 15.50, merchant_id: @merchant_1.id, created_at: '2014-03-13', updated_at: '2020-12-01')
+    @item_3 = Item.create!(name: 'Cowboy Cheddar Cheese', description: 'Sharp as a tack', unit_price: 8.75, merchant_id: @merchant_1.id, created_at: '2012-02-15', updated_at: '2020-10-30')
+    @item_4 = Item.create!(name: 'Goat Gouda Cheese', description: 'Baaaaah', unit_price: 15.50, merchant_id: @merchant_1.id, created_at: '2014-12-25', updated_at: '2020-12-01')
   end
 
   describe 'Single Search' do
@@ -137,7 +137,42 @@ describe 'Item search' do
       expect(result[:data][1]).to be_nil
     end
 
-    xit 'searches by date' do
+    it 'searches by created_at date' do
+      get '/api/v1/items/find?created_at=2015-04-13'
+
+      expect(response).to be_successful
+
+      result = JSON.parse(response.body, symbolize_names: true)
+
+      expect(result).to be_a Hash
+      expect(result).to have_key(:data)
+      expect(result[:data]).to be_a Hash
+
+      expect(result[:data]).to have_key(:attributes)
+      expect(result[:data]).to be_a Hash
+
+      expect(result[:data][:attributes]).to have_key(:name)
+      expect(result[:data][:attributes][:name]).to be_a String
+      expect(result[:data][:attributes][:name]).to eq(@item_1.name)
+    end
+
+    it 'searches by updated_at date' do
+      get '/api/v1/items/find?updated_at=2020-12-01'
+
+      expect(response).to be_successful
+
+      result = JSON.parse(response.body, symbolize_names: true)
+
+      expect(result).to be_a Hash
+      expect(result).to have_key(:data)
+      expect(result[:data]).to be_a Hash
+
+      expect(result[:data]).to have_key(:attributes)
+      expect(result[:data]).to be_a Hash
+
+      expect(result[:data][:attributes]).to have_key(:name)
+      expect(result[:data][:attributes][:name]).to be_a String
+      expect(result[:data][:attributes][:name]).to eq(@item_4.name)
     end
   end
 
@@ -249,7 +284,34 @@ describe 'Item search' do
       expect(result[:data][1][:attributes][:name]).to eq(@item_4.name)
     end
 
-    xit 'searches by date' do
+    it 'searches by created_at date' do
+      get '/api/v1/items/find_all?created_at=2014-12-25'
+
+      expect(response).to be_successful
+
+      result = JSON.parse(response.body, symbolize_names: true)
+
+      expect(result).to be_a Hash
+      expect(result).to have_key(:data)
+      expect(result[:data]).to be_an Array
+
+      expect(result[:data][0][:attributes][:name]).to eq(@item_2.name)
+      expect(result[:data][1][:attributes][:name]).to eq(@item_4.name)
+    end
+
+    it 'searches by updated_at date' do
+      get '/api/v1/items/find_all?updated_at=2020-10-30'
+
+      expect(response).to be_successful
+
+      result = JSON.parse(response.body, symbolize_names: true)
+
+      expect(result).to be_a Hash
+      expect(result).to have_key(:data)
+      expect(result[:data]).to be_an Array
+
+      expect(result[:data][0][:attributes][:name]).to eq(@item_1.name)
+      expect(result[:data][1][:attributes][:name]).to eq(@item_3.name)
     end
   end
 end
