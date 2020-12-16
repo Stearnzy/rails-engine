@@ -35,14 +35,14 @@ describe 'Merchant search' do
       expect(result[:data][:attributes][:name]).to eq(@merchant_1.name)
     end
 
-    xit 'I get only one result' do
+    it 'I get only one result' do
       get '/api/v1/merchants/find?name=a'
 
       expect(response).to be_successful
 
       result = JSON.parse(response.body, symbolize_names: true)
 
-      require 'pry'; binding.pry
+      expect(result).to be_a Hash
     end
 
     it 'search can be case insensitive' do
@@ -83,7 +83,42 @@ describe 'Merchant search' do
       expect(result[:data][:attributes][:name]).to eq(@merchant_2.name)
     end
 
-    xit 'searches by date' do
+    it 'searches by created_at date' do
+      get '/api/v1/merchants/find?created_at=2015-12-13'
+
+      expect(response).to be_successful
+
+      result = JSON.parse(response.body, symbolize_names: true)
+
+      expect(result).to be_a Hash
+      expect(result).to have_key(:data)
+      expect(result[:data]).to be_a Hash
+
+      expect(result[:data]).to have_key(:attributes)
+      expect(result[:data]).to be_a Hash
+
+      expect(result[:data][:attributes]).to have_key(:name)
+      expect(result[:data][:attributes][:name]).to be_a String
+      expect(result[:data][:attributes][:name]).to eq(@merchant_1.name)
+    end
+
+    it 'searches by updated_at date' do
+      get '/api/v1/merchants/find?updated_at=2019-10-01'
+
+      expect(response).to be_successful
+
+      result = JSON.parse(response.body, symbolize_names: true)
+
+      expect(result).to be_a Hash
+      expect(result).to have_key(:data)
+      expect(result[:data]).to be_a Hash
+
+      expect(result[:data]).to have_key(:attributes)
+      expect(result[:data]).to be_a Hash
+
+      expect(result[:data][:attributes]).to have_key(:name)
+      expect(result[:data][:attributes][:name]).to be_a String
+      expect(result[:data][:attributes][:name]).to eq(@merchant_3.name)
     end
   end
 
@@ -150,7 +185,34 @@ describe 'Merchant search' do
       expect(result[:data][1][:attributes][:name]).to eq(@merchant_3.name)
     end
 
-    xit 'searches by date' do
+    it 'searches by created_at date' do
+      get '/api/v1/merchants/find_all?created_at=2013-11-11'
+
+      expect(response).to be_successful
+
+      result = JSON.parse(response.body, symbolize_names: true)
+
+      expect(result).to be_a Hash
+      expect(result).to have_key(:data)
+      expect(result[:data]).to be_an Array
+
+      expect(result[:data][0][:attributes][:name]).to eq(@merchant_2.name)
+      expect(result[:data][1][:attributes][:name]).to eq(@merchant_3.name)
+    end
+
+    it 'searches by updated_at date' do
+      get '/api/v1/merchants/find_all?updated_at=2020-12-15'
+
+      expect(response).to be_successful
+
+      result = JSON.parse(response.body, symbolize_names: true)
+
+      expect(result).to be_a Hash
+      expect(result).to have_key(:data)
+      expect(result[:data]).to be_an Array
+
+      expect(result[:data][0][:attributes][:name]).to eq(@merchant_1.name)
+      expect(result[:data][1][:attributes][:name]).to eq(@merchant_2.name)
     end
   end
 end
