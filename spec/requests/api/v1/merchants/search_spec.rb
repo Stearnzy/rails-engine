@@ -18,6 +18,14 @@ describe 'Merchant search' do
       expect(result).to have_key(:data)
       expect(result[:data]).to be_a Hash
 
+      expect(result[:data]).to have_key(:id)
+      expect(result[:data][:id]).to be_a String
+      expect(result[:data][:id]).to eq(@merchant_1.id.to_s)
+
+      expect(result[:data]).to have_key(:type)
+      expect(result[:data][:type]).to be_a String
+      expect(result[:data][:type]).to eq('merchant')
+
       expect(result[:data]).to have_key(:attributes)
       expect(result[:data]).to be_a Hash
 
