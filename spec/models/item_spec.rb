@@ -59,5 +59,42 @@ RSpec.describe Item, type: :model do
 
       end
     end
+
+    describe '#find_all' do
+      it 'finds based on name' do
+        expect(Item.find_all('name', 'Cheese').count).to eq(2)
+        expect(Item.find_all('name', 'Cheese')).to eq([@item_1, @item_2])
+      end
+
+      it 'finds based on partial search' do
+        expect(Item.find_all('name', 'Che').count).to eq(2)
+        expect(Item.find_all('name', 'Che')).to eq([@item_1, @item_2])
+      end
+
+      it 'finds case insensitive' do
+        expect(Item.find_all('name', 'cHEeSe').count).to eq(2)
+        expect(Item.find_all('name', 'cHEeSe')).to eq([@item_1, @item_2])
+      end
+
+      it 'finds based on description' do
+        expect(Item.find_all('description', 'mel').count).to eq(2)
+        expect(Item.find_all('description', 'mel')).to eq([@item_1, @item_3])
+      end
+
+      xit 'finds based on unit_price' do
+        expect(Item.find_all('unit_price', 12).count).to eq(2)
+        expect(Item.find_all('unit_price', 12)).to eq([@item_1, @item_3])
+      end
+
+      xit 'finds based on created_at' do
+        # Will have to change or add to values above
+        expect(Item.find_all('created_at', '12/25')).to eq(@item_2)
+      end
+
+      xit 'finds based on updated_at' do
+
+      end
+
+    end
   end
 end
