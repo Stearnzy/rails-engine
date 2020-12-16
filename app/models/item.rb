@@ -15,4 +15,15 @@ class Item < ApplicationRecord
     #   Item.find_by("#{search_key} = '%#{search_value.to_date}%'")
     end
   end
+
+  def self.find_all(search_key, search_value)
+    if search_key == 'name' || search_key == 'description'
+      Item.where("LOWER(#{search_key}) LIKE ?", "%#{search_value.downcase}%")
+    elsif search_key == 'unit_price'
+      Item.where("#{search_key} = #{search_value.to_f}")
+    # elsif search_key == 'created_at' || search_key == 'updated_at'
+    #   require 'pry'; binding.pry
+    #   Item.where("#{search_key} = '%#{search_value.to_date}%'")
+    end   
+  end
 end
