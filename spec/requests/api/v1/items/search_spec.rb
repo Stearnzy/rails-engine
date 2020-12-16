@@ -26,6 +26,7 @@ describe 'Item search' do
       expect(result[:data][:id]).to eq(@item_1.id.to_s)
 
       expect(result[:data]).to have_key(:type)
+      expect(result[:data][:type]).to be_a String
       expect(result[:data][:type]).to eq('item')
 
       expect(result[:data]).to have_key(:attributes)
@@ -207,7 +208,6 @@ describe 'Item search' do
       expect(result[:data][1][:attributes][:name]).to eq(@item_2.name)
       expect(result[:data][2][:attributes][:name]).to eq(@item_3.name)
       expect(result[:data][3][:attributes][:name]).to eq(@item_4.name)
-
     end
 
     it 'search can be partial' do
@@ -249,6 +249,5 @@ describe 'Item search' do
 
     xit 'searches by date' do
     end
-
   end
 end
