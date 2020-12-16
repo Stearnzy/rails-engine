@@ -38,12 +38,12 @@ RSpec.describe Item, type: :model do
         expect(result.count).to eq(1)
       end
 
-      xit 'finds based on description' do
-
+      it 'finds based on description' do
+        expect(Item.find_one('description', 'hOL')).to eq(@item_2)
       end
 
-      xit 'finds based on unit_price' do
-
+      it 'finds based on unit_price' do
+        expect(Item.find_one('unit_price', 12.25)).to eq(@item_1)
       end
 
       xit 'finds based on created_at' do
