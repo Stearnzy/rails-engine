@@ -18,7 +18,7 @@ RSpec.describe Item, type: :model do
       @merchant_1 = Merchant.create!(name: 'Cheesemeister')
       @item_1 = Item.create!(name: 'Stinky Blue Cheese', description: 'Smells like feet', unit_price: 12.25, merchant_id: @merchant_1.id, created_at: '2015-04-13', updated_at: '2020-11-15')
       @item_2 = Item.create!(name: 'Simply Swiss Cheese', description: 'Holy moly', unit_price: 10.00, merchant_id: @merchant_1.id, created_at: '2014-12-25', updated_at: '2020-09-11')
-      @item_3 = Item.create!(name: '12 Cow Mozzarella', description: 'Melts easy', unit_price: 12.12, merchant_id: @merchant_1.id, created_at: '2019-08-08', updated_at: '2020-08-16')
+      @item_3 = Item.create!(name: '12 Cow Mozzarella', description: 'Melts easy', unit_price: 12.25, merchant_id: @merchant_1.id, created_at: '2015-04-13', updated_at: '2020-09-11')
     end
 
     describe '#find_one' do
@@ -51,12 +51,12 @@ RSpec.describe Item, type: :model do
         expect(Item.find_one('unit_price', 12.25)).to eq(@item_1)
       end
 
-      xit 'finds based on created_at' do
-        expect(Item.find_one('created_at', '12/25')).to eq(@item_2)
+      it 'finds based on created_at' do
+        expect(Item.find_one('created_at', '2014-12-25')).to eq(@item_2)
       end
 
-      xit 'finds based on updated_at' do
-
+      it 'finds based on updated_at' do
+        expect(Item.find_one('updated_at', '2020-11-15')).to eq(@item_1)
       end
     end
 
@@ -81,20 +81,20 @@ RSpec.describe Item, type: :model do
         expect(Item.find_all('description', 'mel')).to eq([@item_1, @item_3])
       end
 
-      xit 'finds based on unit_price' do
-        expect(Item.find_all('unit_price', 12).count).to eq(2)
-        expect(Item.find_all('unit_price', 12)).to eq([@item_1, @item_3])
+      it 'finds based on unit_price' do
+        expect(Item.find_all('unit_price', 12.25).count).to eq(2)
+        expect(Item.find_all('unit_price', 12.25)).to eq([@item_1, @item_3])
       end
 
-      xit 'finds based on created_at' do
-        # Will have to change or add to values above
-        expect(Item.find_all('created_at', '12/25')).to eq(@item_2)
+      it 'finds based on created_at' do
+        expect(Item.find_all('created_at', '2015-04-13').count).to eq(2)
+        expect(Item.find_all('created_at', '2015-04-13')).to eq([@item_1, @item_3])
       end
 
-      xit 'finds based on updated_at' do
-
+      it 'finds based on updated_at' do
+        expect(Item.find_all('updated_at', '2020-09-11').count).to eq(2)
+        expect(Item.find_all('updated_at', '2020-09-11')).to eq([@item_2, @item_3])
       end
-
     end
   end
 end
