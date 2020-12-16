@@ -18,7 +18,8 @@ RSpec.describe Item, type: :model do
       @merchant_1 = Merchant.create!(name: 'Cheesemeister')
       @item_1 = Item.create!(name: 'Stinky Blue Cheese', description: 'Smells like feet', unit_price: 12.25, merchant_id: @merchant_1.id, created_at: '2015-04-13', updated_at: '2020-11-15')
       @item_2 = Item.create!(name: 'Simply Swiss Cheese', description: 'Holy moly', unit_price: 10.00, merchant_id: @merchant_1.id, created_at: '2014-12-25', updated_at: '2020-09-11')
-      end
+      @item_3 = Item.create!(name: '12 Cow Mozzarella', description: 'Melts easy', unit_price: 12.12, merchant_id: @merchant_1.id, created_at: '2019-08-08', updated_at: '2020-08-16')
+    end
 
     describe '#find_one' do
       it 'finds based on name' do
@@ -31,6 +32,10 @@ RSpec.describe Item, type: :model do
 
       it 'finds case insensitive' do
         expect(Item.find_one('name', 'STinK')).to eq(@item_1)
+      end
+
+      it 'finds based on numbers in name' do
+        expect(Item.find_one('name', '12')).to eq(@item_3)
       end
 
       it 'finds one' do
@@ -47,7 +52,7 @@ RSpec.describe Item, type: :model do
       end
 
       xit 'finds based on created_at' do
-
+        expect(Item.find_one('created_at', '12/25')).to eq(@item_2)
       end
 
       xit 'finds based on updated_at' do
