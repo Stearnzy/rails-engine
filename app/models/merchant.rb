@@ -7,6 +7,18 @@ class Merchant < ApplicationRecord
   has_many :transactions, through: :invoices
 
   def self.find_one(search_key, search_value)
-    Merchant.find_by("LOWER(#{search_key}) LIKE ?", "%#{search_value.downcase}%")
+    if search_key == 'name'
+      Merchant.find_by("LOWER(#{search_key}) LIKE ?", "%#{search_value.downcase}%")
+    # elsif search_key == 'created_at' || search_key == 'updated_at'
+
+    end
+  end
+
+  def self.find_all(search_key, search_value)
+    if search_key == 'name'
+      Merchant.where("LOWER(#{search_key}) LIKE ?", "%#{search_value.downcase}%")
+    # elsif search_key == 'created_at' || search_key == 'updated_at'
+
+    end
   end
 end
