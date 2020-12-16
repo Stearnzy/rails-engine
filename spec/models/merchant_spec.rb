@@ -17,7 +17,6 @@ RSpec.describe Merchant, type: :model do
       @merchant_1 = Merchant.create!(name: 'The Rusty Bucket', created_at: '2020-12-13', updated_at: '2020-12-15')
       @merchant_2 = Merchant.create!(name: 'The Clean Spoon', created_at: '2020-11-11', updated_at: '2020-12-01')
       @merchant_3 = Merchant.create!(name: 'Cheesemeister', created_at: '2020-11-11', updated_at: '2020-12-15')
-
     end
 
     describe '#find_one' do
@@ -38,12 +37,12 @@ RSpec.describe Merchant, type: :model do
         expect(result.count).to eq(1)
       end
 
-      xit 'finds based on created_at' do
-
+      it 'finds based on created_at' do
+        expect(Merchant.find_one('created_at', '2020-12-13')).to eq(@merchant_1)
       end
 
-      xit 'finds based on updated_at' do
-
+      it 'finds based on updated_at' do
+        expect(Merchant.find_one('updated_at', '2020-12-01')).to eq(@merchant_2)
       end
     end
 
@@ -63,15 +62,15 @@ RSpec.describe Merchant, type: :model do
         expect(Merchant.find_all('name', 'tHE')).to eq([@merchant_1, @merchant_2])
       end
 
-      xit 'finds based on created_at' do
-        # Will have to change or add to values above
-
+      it 'finds based on created_at' do
+        expect(Merchant.find_all('created_at', '2020-11-11').count).to eq(2)
+        expect(Merchant.find_all('created_at', '2020-11-11')).to eq([@merchant_2, @merchant_3])
       end
 
-      xit 'finds based on updated_at' do
-
+      it 'finds based on updated_at' do
+        expect(Merchant.find_all('updated_at', '2020-12-15').count).to eq(2)
+        expect(Merchant.find_all('updated_at', '2020-12-15')).to eq([@merchant_1, @merchant_3])
       end
-
     end
   end
 end
