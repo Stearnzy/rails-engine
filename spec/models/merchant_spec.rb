@@ -16,6 +16,8 @@ RSpec.describe Merchant, type: :model do
     before(:each) do
       @merchant_1 = Merchant.create!(name: 'The Rusty Bucket', created_at: '2020-12-13', updated_at: '2020-12-15')
       @merchant_2 = Merchant.create!(name: 'The Clean Spoon', created_at: '2020-11-11', updated_at: '2020-12-01')
+      @merchant_3 = Merchant.create!(name: 'Cheesemeister', created_at: '2020-11-11', updated_at: '2020-12-15')
+
     end
 
     describe '#find_one' do
@@ -43,6 +45,33 @@ RSpec.describe Merchant, type: :model do
       xit 'finds based on updated_at' do
 
       end
+    end
+
+    describe '#find_all' do
+      it 'finds based on name' do
+        expect(Merchant.find_all('name', 'The').count).to eq(2)
+        expect(Merchant.find_all('name', 'The')).to eq([@merchant_1, @merchant_2])
+      end
+
+      it 'finds based on partial search' do
+        expect(Merchant.find_all('name', 'Th').count).to eq(2)
+        expect(Merchant.find_all('name', 'Th')).to eq([@merchant_1, @merchant_2])
+      end
+
+      it 'finds case insensitive' do
+        expect(Merchant.find_all('name', 'tHE').count).to eq(2)
+        expect(Merchant.find_all('name', 'tHE')).to eq([@merchant_1, @merchant_2])
+      end
+
+      xit 'finds based on created_at' do
+        # Will have to change or add to values above
+
+      end
+
+      xit 'finds based on updated_at' do
+
+      end
+
     end
   end
 end
