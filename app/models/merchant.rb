@@ -10,7 +10,7 @@ class Merchant < ApplicationRecord
     if search_key == 'name'
       Merchant.find_by("LOWER(#{search_key}) LIKE ?", "%#{search_value.downcase}%")
     elsif search_key == 'created_at' || search_key == 'updated_at'
-      Merchant.find_by("DATE(#{search_key}) = ?", "#{search_value.to_date}")
+      Merchant.find_by("DATE(#{search_key}) = ?", search_value.to_date.to_s)
     end
   end
 
@@ -18,16 +18,17 @@ class Merchant < ApplicationRecord
     if search_key == 'name'
       Merchant.where("LOWER(#{search_key}) LIKE ?", "%#{search_value.downcase}%")
     elsif search_key == 'created_at' || search_key == 'updated_at'
-      Merchant.where("DATE(#{search_key}) = ?", "#{search_value.to_date}")
+      Merchant.where("DATE(#{search_key}) = ?", search_value.to_date.to_s)
     end
   end
 
   def self.most_revenue(limit)
-    Merchant.select("merchants.*, SUM(invoice_items.unit_price * invoice_items.quantity) AS revenue")
-    .joins(invoices: [:invoice_items, :transactions])
-    .where(transactions: {result: "success"})
-    .where(invoices: {status: "shipped"})
-    .group(:id).order("revenue DESC")
-    .limit(limit)
+    Merchant.select('merchants.*, SUM(invoice_items.unit_price * invoice_items.quantity) AS revenue')
+            .joins(invoices: %i[invoice_items transactions])
+            .where(transactions: { result: 'success' })
+            .where(invoices: { status: 'shipped' })
+            .group(:id)
+            .order('revenue DESC')
+            .limit(limit)
   end
 end
