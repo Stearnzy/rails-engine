@@ -41,8 +41,8 @@ describe 'Most Revenue' do
     create(:invoice_item, quantity: 20, unit_price: 20.00, invoice_id: @inv8.id, item_id: create(:item, unit_price: 20.00).id)
 
     @inv9 = create(:invoice, merchant_id: @merch2.id)
-    create(:transaction, result: "success", invoice_id: @inv8.id)
-    create(:invoice_item, quantity: 32, unit_price: 20.00, invoice_id: @inv8.id, item_id: create(:item, unit_price: 20.00).id)
+    create(:transaction, result: "success", invoice_id: @inv9.id)
+    create(:invoice_item, quantity: 32, unit_price: 20.00, invoice_id: @inv9.id, item_id: create(:item, unit_price: 20.00).id)
   end
 
   it 'returns merchants with most revenue' do
@@ -55,10 +55,10 @@ describe 'Most Revenue' do
 
     expect(merchants[:data].count).to eq(quantity)
 
-    expect(merchants[:data][0][:id]).to eq(@merch3.id.to_s)
-    expect(merchants[:data][1][:id]).to eq(@merch5.id.to_s)
-    expect(merchants[:data][2][:id]).to eq(@merch4.id.to_s)
-    expect(merchants[:data][3][:id]).to eq(@merch2.id.to_s)
+    expect(merchants[:data][0][:id]).to eq(@merch2.id.to_s)
+    expect(merchants[:data][1][:id]).to eq(@merch3.id.to_s)
+    expect(merchants[:data][2][:id]).to eq(@merch5.id.to_s)
+    expect(merchants[:data][3][:id]).to eq(@merch4.id.to_s)
 
     merchants[:data].each do |merchant|
       expect(merchant).to have_key(:id)
@@ -80,18 +80,13 @@ describe 'Most Revenue' do
 
     merchant = JSON.parse(response.body, symbolize_names: true)
 
-    expect(merchant_result[:data]).to have_key(:id)
-    expect(merchant_result[:data]).to have_key(:type)
-    expect(merchant_result[:data]).to have_key(:attributes)
+    expect(merchant[:data]).to have_key(:id)
+    expect(merchant[:data]).to have_key(:attributes)
 
-    expect(merchant_result[:data][:type]).to eq('merchant')
+    expect(merchant[:data][:id]).to eq(nil)
 
-    expect(merchant_result[:data][:attributes]).to have_key(:name)
-    expect(merchant_result[:data][:attributes][:name]).to be_a String
-    expect(merchant_result[:data][:attributes][:name]).to_not be_empty
-
-    expect(merchant_result[:data][:id]).to eq("#{@merch2.id}")
-    require 'pry'; binding.pry
-    revenue = 680.00
+    expect(merchant[:data][:attributes]).to have_key(:revenue)
+    expect(merchant[:data][:attributes][:revenue]).to be_a Float
+    expect(merchant[:data][:attributes][:revenue]).to eq(680.0)
   end
 end
