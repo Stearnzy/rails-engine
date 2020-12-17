@@ -45,10 +45,31 @@ describe 'Most Revenue' do
     @inv7 = create(:invoice, merchant_id: @merch2.id, status: "packaged")
     create(:transaction, result: "success", invoice_id: @inv7.id)
     create(:invoice_item, quantity: 15, unit_price: 20.00, invoice_id: @inv7.id, item_id: create(:item, unit_price: 20.00).id)
+
+    @inv8 = create(:invoice, merchant_id: @merch3.id)
+    create(:transaction, result: "success", invoice_id: @inv8.id)
+    create(:invoice_item, quantity: 20, unit_price: 20.00, invoice_id: @inv8.id, item_id: create(:item, unit_price: 20.00).id)
   end
 
   it 'returns merchants with most revenue' do
-    
-    require 'pry'; binding.pry
+    quantity = 4
+    get "/api/v1/merchants/most_revenue?quantity=#{quantity}"
+
+    expect(response).to be_successful
+
+    results = JSON.parse(response.body, symbolize_names: true)
+
+    expect(results[:data].count).to eq(quantity)
+
+    expect(results[:data][0][:id]).to eq(@merch3.id.to_s)
+    expect(results[:data][1][:id]).to eq(@merch5.id.to_s)
+    expect(results[:data][2][:id]).to eq(@merch4.id.to_s)
+    expect(results[:data][3][:id]).to eq(@merch2.id.to_s)
+
+    results[:data].each do |result|
+      expect(result[:type]).to eq("merchant")
+
+      expect(result[:id].to_i).to_not eq(@merch1.id)
+    end
   end
 end
