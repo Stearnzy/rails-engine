@@ -21,4 +21,13 @@ class Merchant < ApplicationRecord
       Merchant.where("DATE(#{search_key}) = ?", "#{search_value.to_date}")
     end
   end
+
+  def self.most_revenue(limit)
+    Merchant.select("merchants.*, SUM(invoice_items.unit_price * invoice_items.quantity) AS revenue")
+    .joins(invoices: [:invoice_items, :transactions])
+    .where(transactions: {result: "success"})
+    .where(invoices: {status: "shipped"})
+    .group(:id).order("revenue DESC")
+    .limit(limit)
+  end
 end
