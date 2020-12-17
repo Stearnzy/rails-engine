@@ -39,6 +39,10 @@ describe 'Most Revenue' do
     @inv8 = create(:invoice, merchant_id: @merch3.id)
     create(:transaction, result: "success", invoice_id: @inv8.id)
     create(:invoice_item, quantity: 20, unit_price: 20.00, invoice_id: @inv8.id, item_id: create(:item, unit_price: 20.00).id)
+
+    @inv9 = create(:invoice, merchant_id: @merch2.id)
+    create(:transaction, result: "success", invoice_id: @inv8.id)
+    create(:invoice_item, quantity: 32, unit_price: 20.00, invoice_id: @inv8.id, item_id: create(:item, unit_price: 20.00).id)
   end
 
   it 'returns merchants with most revenue' do
@@ -66,5 +70,28 @@ describe 'Most Revenue' do
 
       expect(merchant[:id].to_i).to_not eq(@merch1.id)
     end
+  end
+
+  it 'returns revenue for a single merchant' do
+    id = @merch2.id
+    get "/api/v1/merchants/#{id}/revenue"
+
+    expect(response).to be_successful
+
+    merchant = JSON.parse(response.body, symbolize_names: true)
+
+    expect(merchant_result[:data]).to have_key(:id)
+    expect(merchant_result[:data]).to have_key(:type)
+    expect(merchant_result[:data]).to have_key(:attributes)
+
+    expect(merchant_result[:data][:type]).to eq('merchant')
+
+    expect(merchant_result[:data][:attributes]).to have_key(:name)
+    expect(merchant_result[:data][:attributes][:name]).to be_a String
+    expect(merchant_result[:data][:attributes][:name]).to_not be_empty
+
+    expect(merchant_result[:data][:id]).to eq("#{@merch2.id}")
+    require 'pry'; binding.pry
+    revenue = 680.00
   end
 end
