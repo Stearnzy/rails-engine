@@ -57,17 +57,26 @@ describe 'Most Revenue' do
 
     expect(response).to be_successful
 
-    results = JSON.parse(response.body, symbolize_names: true)
+    merchants = JSON.parse(response.body, symbolize_names: true)
 
-    expect(results[:data].count).to eq(quantity)
+    expect(merchants[:data].count).to eq(quantity)
 
-    expect(results[:data][0][:id]).to eq(@merch3.id.to_s)
-    expect(results[:data][1][:id]).to eq(@merch5.id.to_s)
-    expect(results[:data][2][:id]).to eq(@merch4.id.to_s)
-    expect(results[:data][3][:id]).to eq(@merch2.id.to_s)
+    merchants[:data].each do |merchant|
+      expect(merchant[:attributes]).to have_key(:name)
+      expect(merchant[:attributes][:name]).to be_a(String)
+    end
 
-    results[:data].each do |result|
+    expect(merchants[:data][0][:id]).to eq(@merch3.id.to_s)
+    expect(merchants[:data][1][:id]).to eq(@merch5.id.to_s)
+    expect(merchants[:data][2][:id]).to eq(@merch4.id.to_s)
+    expect(merchants[:data][3][:id]).to eq(@merch2.id.to_s)
+
+    merchants[:data].each do |result|
+      expect(result).to have_key(:id)
+      expect(result).to have_key(:type)
       expect(result[:type]).to eq("merchant")
+      expect(result).to have_key(:attributes)
+      expect(result[:attributes]).to have_key(:name)
 
       expect(result[:id].to_i).to_not eq(@merch1.id)
     end
