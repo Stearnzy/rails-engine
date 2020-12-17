@@ -2,16 +2,6 @@ require 'rails_helper'
 
 describe 'Most Revenue' do
   before(:each) do
-    # merchant_1 = create(:merchant)
-    # merchant_2 = create(:merchant)
-    # merchant_3 = create(:merchant)
-    # merchant_4 = create(:merchant)
-    # merchant_5 = create(:merchant)
-
-    # invoice_1 = create(:invoice, merchant_id: merchant_1.id)
-    # create(:transaction, result: "success", invoice_id: invoice_1.id)
-    # create(:invoice_item, quantity: 20, unit_price: 100.00, invoice_id: invoice_1.id, item_id: create(:item, unit_price: 100.00).id)
-    
     @merch1 = create(:merchant)
     @merch2 = create(:merchant)
     @merch3 = create(:merchant)
