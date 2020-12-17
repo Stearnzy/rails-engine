@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       resources :items do
         get '/merchants', to: 'items/merchants#show'
       end
+      get '/revenue', to: 'revenue#show'
     end
   end
 end
