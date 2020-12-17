@@ -56,15 +56,15 @@ describe 'Most Revenue' do
     expect(merchants[:data][2][:id]).to eq(@merch4.id.to_s)
     expect(merchants[:data][3][:id]).to eq(@merch2.id.to_s)
 
-    merchants[:data].each do |result|
-      expect(result).to have_key(:id)
-      expect(result).to have_key(:type)
-      expect(result[:type]).to eq("merchant")
-      expect(result).to have_key(:attributes)
-      expect(result[:attributes]).to have_key(:name)
+    merchants[:data].each do |merchant|
+      expect(merchant).to have_key(:id)
+      expect(merchant).to have_key(:type)
+      expect(merchant[:type]).to eq("merchant")
+      expect(merchant).to have_key(:attributes)
+      expect(merchant[:attributes]).to have_key(:name)
       expect(merchant[:attributes][:name]).to be_a(String)
 
-      expect(result[:id].to_i).to_not eq(@merch1.id)
+      expect(merchant[:id].to_i).to_not eq(@merch1.id)
     end
   end
 end
