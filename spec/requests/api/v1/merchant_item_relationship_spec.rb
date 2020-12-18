@@ -55,6 +55,6 @@ describe 'Items' do
     expect(merchant_result[:data][:attributes][:name]).to be_a String
     expect(merchant_result[:data][:attributes][:name]).to_not be_empty
 
-    expect(merchant_result[:data][:id]).to eq("#{created_merchant.id}")
+    expect(merchant_result[:data][:id]).to eq(created_merchant.id.to_s)
   end
 end
