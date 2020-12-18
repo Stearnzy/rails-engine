@@ -124,6 +124,7 @@ describe 'Most Revenue' do
     error = JSON.parse(response.body, symbolize_names: true)
 
     expect(error).to be_a Hash
+
     expect(error).to have_key(:error)
     expect(error[:error]).to be_a String
     expect(error[:error]).to eq('end date occurs before start date')
@@ -142,7 +143,7 @@ describe 'Most Revenue' do
     expect(error).to be_a Hash
     expect(error).to have_key(:error)
     expect(error[:error]).to be_a String
-    expect(error[:error]).to eq('dates cannot be empty')
+    expect(error[:error]).to eq('dates must be valid')
   end
 
   it 'errors if start date is missing' do
@@ -158,6 +159,22 @@ describe 'Most Revenue' do
     expect(error).to be_a Hash
     expect(error).to have_key(:error)
     expect(error[:error]).to be_a String
-    expect(error[:error]).to eq('dates cannot be empty')
+    expect(error[:error]).to eq('dates must be valid')
+  end
+
+  it 'errors if dates are not a valid format' do
+    starting = 'hello'
+    ending = '2020-09-16'
+
+    get "/api/v1/revenue?start=#{starting}&end=#{ending}"
+
+    expect(response).to be_successful
+
+    error = JSON.parse(response.body, symbolize_names: true)
+
+    expect(error).to be_a Hash
+    expect(error).to have_key(:error)
+    expect(error[:error]).to be_a String
+    expect(error[:error]).to eq('dates must be valid')
   end
 end
