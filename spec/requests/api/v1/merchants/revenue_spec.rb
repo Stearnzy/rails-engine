@@ -113,6 +113,7 @@ describe 'Most Revenue' do
     expect(revenue_data[:data][:attributes][:revenue]).to eq(expected_revenue)
   end
 
+  # EDGE CASE
   it 'errors if ending date comes before starting date' do
     starting = '2020-09-16'
     ending = '2020-03-19'
@@ -162,8 +163,24 @@ describe 'Most Revenue' do
     expect(error[:error]).to eq('dates must be valid')
   end
 
-  it 'errors if dates are not a valid format' do
+  it 'errors if date entered is a random word' do
     starting = 'hello'
+    ending = '2020-09-16'
+
+    get "/api/v1/revenue?start=#{starting}&end=#{ending}"
+
+    expect(response).to be_successful
+
+    error = JSON.parse(response.body, symbolize_names: true)
+
+    expect(error).to be_a Hash
+    expect(error).to have_key(:error)
+    expect(error[:error]).to be_a String
+    expect(error[:error]).to eq('dates must be valid')
+  end
+
+  it 'errors if dates are entered a random number' do
+    starting = '58964589'
     ending = '2020-09-16'
 
     get "/api/v1/revenue?start=#{starting}&end=#{ending}"
