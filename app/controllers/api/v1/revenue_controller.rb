@@ -11,8 +11,6 @@ class Api::V1::RevenueController < ApplicationController
     end
   end
 
-
-
   private
 
   def backwards_date_error
@@ -32,11 +30,9 @@ class Api::V1::RevenueController < ApplicationController
   end
 
   def DateTime.parsable?(string)
-    begin
-      parse(string)
-      true
-    rescue ArgumentError
-      false
-    end
+    parse(string)
+    true
+  rescue ArgumentError
+    false
   end
 end
