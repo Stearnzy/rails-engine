@@ -114,6 +114,27 @@ describe 'Most Revenue' do
   end
 
   # EDGE CASE
+  it 'if the start and end dates are the same, the revenue from that entire day is reported' do
+    starting = '2020-02-01'
+    ending = '2020-02-01'
+
+    get "/api/v1/revenue?start=#{starting}&end=#{ending}"
+
+    expect(response).to be_successful
+
+    revenue_data = JSON.parse(response.body, symbolize_names: true)
+
+    expect(revenue_data).to have_key(:data)
+    expect(revenue_data[:data]).to have_key(:id)
+    expect(revenue_data[:data][:id]).to be_nil
+
+    expect(revenue_data[:data]).to have_key(:attributes)
+    expect(revenue_data[:data][:attributes]).to be_a Hash
+    expect(revenue_data[:data][:attributes]).to have_key(:revenue)
+    expect(revenue_data[:data][:attributes][:revenue]).to be_a Float
+    expect(revenue_data[:data][:attributes][:revenue]).to eq(20.0)
+  end
+
   it 'errors if ending date comes before starting date' do
     starting = '2020-09-16'
     ending = '2020-03-19'
