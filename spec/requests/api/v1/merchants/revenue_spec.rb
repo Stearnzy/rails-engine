@@ -112,4 +112,20 @@ describe 'Most Revenue' do
     expect(revenue_data[:data][:attributes][:revenue]).to be_a Float
     expect(revenue_data[:data][:attributes][:revenue]).to eq(expected_revenue)
   end
+
+  it 'errors if ending date comes before starting date' do
+    starting = '2020-09-16'
+    ending = '2020-03-19'
+
+    get "/api/v1/revenue?start=#{starting}&end=#{ending}"
+
+    expect(response).to be_successful
+
+    error = JSON.parse(response.body, symbolize_names: true)
+
+    expect(error).to be_a Hash
+    expect(error).to have_key(:error)
+    expect(error[:error]).to be_a String
+    expect(error[:error]).to eq('end date occurs before start date')
+  end
 end
