@@ -92,4 +92,28 @@ describe 'Item' do
     expect { Item.find(item.id) }.to raise_error(ActiveRecord::RecordNotFound)
     expect(response.status).to eq(204)
   end
+
+  # EDGE CASE
+  it 'cannot be created with an item price of 0 or less' do
+    merch_id = create(:merchant).id
+
+    item_params = { name: 'Top Hat', description: 'Goes on your head.',
+                    unit_price: 40.00, merchant_id: merch_id }
+    headers = { 'CONTENT-TYPE' => 'application/json' }
+
+    expect(Item.count).to eq(0)
+    post '/api/v1/items', headers: headers, params: JSON.generate(item_params)
+
+    expect(response).to be_successful
+    expect(Item.count).to eq(1)
+
+    item_params = { name: 'Top Hat', description: 'Goes on your head.',
+                    unit_price: -1.00, merchant_id: merch_id }
+    headers = { 'CONTENT-TYPE' => 'application/json' }
+
+    post '/api/v1/items', headers: headers, params: JSON.generate(item_params)
+
+    expect(response).to be_successful
+    expect(Item.count).to eq(1)
+  end
 end
