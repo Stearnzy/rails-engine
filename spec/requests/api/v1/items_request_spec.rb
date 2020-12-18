@@ -116,4 +116,18 @@ describe 'Item' do
     expect(response).to be_successful
     expect(Item.count).to eq(1)
   end
+
+  it 'cannot be updated with an item price of 0 or less' do
+    original_item = create(:item)
+    item_params = { unit_price: -1.00 }
+    headers = { 'CONTENT-TYPE' => 'application/json' }
+
+    patch "/api/v1/items/#{original_item.id}", headers: headers, params: JSON.generate(item_params)
+    updated_item = Item.find(original_item.id)
+
+    expect(response).to be_successful
+
+    expect(updated_item[:unit_price]).to_not eq(-1.00)
+    expect(updated_item[:unit_price]).to eq(original_item[:unit_price])
+  end
 end
