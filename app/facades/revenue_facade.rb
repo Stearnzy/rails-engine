@@ -5,8 +5,8 @@ class RevenueFacade
 
     Invoice.joins(:invoice_items, :transactions)
            .where(updated_at: starting..ending)
-           .where(status: 'shipped')
-           .where(transactions: { result: 'success' })
+           .merge(Invoice.shipped)
+           .merge(Transaction.successful)
            .sum('invoice_items.unit_price * invoice_items.quantity')
   end
 end

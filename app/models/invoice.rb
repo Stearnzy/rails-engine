@@ -1,4 +1,6 @@
 class Invoice < ApplicationRecord
+  scope :shipped, -> { where(status: 'shipped') }
+
   validates_presence_of :status
 
   belongs_to :customer
